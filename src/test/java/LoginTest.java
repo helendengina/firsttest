@@ -1,3 +1,6 @@
+import org.openqa.selenium.firefox.FirefoxBinary;
+import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.Test;
 import org.openqa.selenium.WebDriver;
@@ -8,11 +11,14 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 public class LoginTest {
     private static WebDriver driverChrome;
     private static WebDriver driverFirefox;
+    private static WebDriver driverFirefoxOldScheme;
     private static WebDriver driverIE;
 
     /**
@@ -31,6 +37,17 @@ public class LoginTest {
     public static void openFirefox() {
         driverFirefox = new FirefoxDriver();
         driverFirefox.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+    }
+
+    /**
+     * Открывает браузер Mozilla Firefox по старой схеме (использую браузер Mozilla Firefox ESR 45.9.0).
+     */
+    @Test
+    public static void openFirefoxOldScheme() {
+        DesiredCapabilities caps = new DesiredCapabilities();
+        caps.setCapability(FirefoxDriver.MARIONETTE, false);
+        driverFirefoxOldScheme = new FirefoxDriver(new FirefoxBinary(new File("C:/Users/dengina.elena/Documents/MozillaFirefoxESR/firefox.exe")), new FirefoxProfile(), caps);
+        driverFirefoxOldScheme.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
     /**
@@ -73,6 +90,21 @@ public class LoginTest {
     }
 
     /**
+     * Залогинивается в панели администрирования учебного приложения в браузере Mozilla Firefox по старой схеме.
+     */
+    @Test(dependsOnMethods = {"openFirefoxOldScheme"}, alwaysRun = true)
+    public void loginTestFirefoxOldScheme() throws InterruptedException {
+        driverFirefoxOldScheme.get("http://localhost/litecart/admin/");
+        WebElement loginField = (new WebDriverWait(driverFirefoxOldScheme,10)
+                .until(ExpectedConditions.presenceOfElementLocated(By.name("username"))));
+        loginField.sendKeys("admin");
+        WebElement passwordField = driverFirefoxOldScheme.findElement(By.name("password"));
+        passwordField.sendKeys("admin");
+        WebElement loginButton = driverFirefoxOldScheme.findElement(By.cssSelector("#box-login > form > div.footer > button"));
+        loginButton.click();
+    }
+
+    /**
      * Залогинивается в панели администрирования учебного приложения в браузере IE.
      */
     @Test(dependsOnMethods = {"openIE"}, alwaysRun = true)
@@ -99,6 +131,10 @@ public class LoginTest {
         if (driverFirefox != null) {
             driverFirefox.quit();
             driverFirefox = null;
+        }
+        if (driverFirefoxOldScheme != null) {
+            driverFirefoxOldScheme.quit();
+            driverFirefoxOldScheme = null;
         }
         if (driverIE != null) {
             driverIE.quit();

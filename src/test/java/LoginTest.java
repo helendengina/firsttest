@@ -11,7 +11,6 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
@@ -19,6 +18,7 @@ public class LoginTest {
     private static WebDriver driverChrome;
     private static WebDriver driverFirefox;
     private static WebDriver driverFirefoxOldScheme;
+    private static WebDriver driverFirefoxNightly;
     private static WebDriver driverIE;
 
     /**
@@ -48,6 +48,15 @@ public class LoginTest {
         caps.setCapability(FirefoxDriver.MARIONETTE, false);
         driverFirefoxOldScheme = new FirefoxDriver(new FirefoxBinary(new File("C:/Users/dengina.elena/Documents/MozillaFirefoxESR/firefox.exe")), new FirefoxProfile(), caps);
         driverFirefoxOldScheme.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+    }
+
+    /**
+     * Открывает браузер Mozilla Firefox Nightly (использую Nightly 57.0a1).
+     */
+    @Test
+    public static void openFirefoxNightly() {
+        driverFirefoxNightly = new FirefoxDriver(new FirefoxBinary(new File("C:/Program Files/Nightly/firefox.exe")));
+        driverFirefoxNightly.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
     /**
@@ -105,6 +114,21 @@ public class LoginTest {
     }
 
     /**
+     * Залогинивается в панели администрирования учебного приложения в браузере Mozilla Firefox Nightly.
+     */
+    @Test(dependsOnMethods = {"openFirefoxNightly"}, alwaysRun = true)
+    public void loginTestFirefoxNightly() throws InterruptedException {
+        driverFirefoxNightly.get("http://localhost/litecart/admin/");
+        WebElement loginField = (new WebDriverWait(driverFirefoxNightly,10)
+                .until(ExpectedConditions.presenceOfElementLocated(By.name("username"))));
+        loginField.sendKeys("admin");
+        WebElement passwordField = driverFirefoxNightly.findElement(By.name("password"));
+        passwordField.sendKeys("admin");
+        WebElement loginButton = driverFirefoxNightly.findElement(By.cssSelector("#box-login > form > div.footer > button"));
+        loginButton.click();
+    }
+
+    /**
      * Залогинивается в панели администрирования учебного приложения в браузере IE.
      */
     @Test(dependsOnMethods = {"openIE"}, alwaysRun = true)
@@ -135,6 +159,10 @@ public class LoginTest {
         if (driverFirefoxOldScheme != null) {
             driverFirefoxOldScheme.quit();
             driverFirefoxOldScheme = null;
+        }
+        if (driverFirefoxNightly != null) {
+            driverFirefoxNightly.quit();
+            driverFirefoxNightly = null;
         }
         if (driverIE != null) {
             driverIE.quit();

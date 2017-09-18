@@ -14,28 +14,12 @@ public class ProductTest {
     private static WebDriver driver;
 
     /**
-     * Открывает главную страницу учебного приложения litecart в браузере Google Chrome.
+     * Открывает главную страницу учебного приложения litecart.
      */
     public void start() {
         driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        driver.get("http://localhost/litecart/en/");
-    }
-
-    /**
-     * Открывает главную страницу учебного приложения litecart в браузере Mozilla Firefox.
-     */
-    public void startMozillaFirefox(){
-        driver = new FirefoxDriver();
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        driver.get("http://localhost/litecart/en/");
-    }
-
-    /**
-     * Открывает главную страницу учебного приложения litecart в браузере IE.
-     */
-    public void startIE(){
-        driver = new InternetExplorerDriver();
+        //driver = new FirefoxDriver();
+        //driver = new InternetExplorerDriver();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.get("http://localhost/litecart/en/");
     }
@@ -78,7 +62,12 @@ public class ProductTest {
         // Проверяет стиля обычной цены.
         ArrayList<String> regularPriceStyle = getPriceStyle(getRegularPriceLocation(getMainPageLocator()));
         String regularPriceColor = regularPriceStyle.get(0);
-        Assert.assertEquals(regularPriceColor, "rgba(51, 51, 51, 1)");
+        if (driver instanceof ChromeDriver || driver instanceof InternetExplorerDriver) {
+            Assert.assertEquals(regularPriceColor, "rgba(51, 51, 51, 1)");
+        }
+        if (driver instanceof FirefoxDriver) {
+            Assert.assertEquals(regularPriceColor, "rgb(51, 51, 51)");
+        }
         String regularPriceTextDecoration = regularPriceStyle.get(1);
         Assert.assertEquals(regularPriceTextDecoration, "S");
         String regularPriceSizeLine = regularPriceStyle.get(2);
@@ -88,7 +77,12 @@ public class ProductTest {
         start();
         ArrayList<String> campaignPriceStyle = getPriceStyle(getCampaignPriceLocation(getMainPageLocator()));
         String campaignPriceColor = campaignPriceStyle.get(0);
-        Assert.assertEquals(campaignPriceColor, "rgba(204, 0, 0, 1)");
+        if (driver instanceof ChromeDriver || driver instanceof InternetExplorerDriver) {
+            Assert.assertEquals(campaignPriceColor, "rgba(204, 0, 0, 1)");
+        }
+        if (driver instanceof FirefoxDriver) {
+            Assert.assertEquals(campaignPriceColor, "rgb(204, 0, 0)");
+        }
         String campaignPriceTextDecoration = campaignPriceStyle.get(1);
         Assert.assertEquals(campaignPriceTextDecoration, "STRONG");
         String campaignPriceSizeLine = campaignPriceStyle.get(2);
@@ -106,7 +100,12 @@ public class ProductTest {
         // Проверяет стиля обычной цены.
         ArrayList<String> regularPriceStyle = getPriceStyle(getRegularPriceLocation(getProductPageLocator()));
         String regularPriceColor = regularPriceStyle.get(0);
-        Assert.assertEquals(regularPriceColor, "rgba(51, 51, 51, 1)");
+        if (driver instanceof ChromeDriver || driver instanceof InternetExplorerDriver) {
+            Assert.assertEquals(regularPriceColor, "rgba(51, 51, 51, 1)");
+        }
+        if (driver instanceof FirefoxDriver) {
+            Assert.assertEquals(regularPriceColor, "rgb(51, 51, 51)");
+        }
         String regularPriceTextDecoration = regularPriceStyle.get(1);
         Assert.assertEquals(regularPriceTextDecoration, "DEL");
         String regularPriceSizeLine = regularPriceStyle.get(2);
@@ -116,7 +115,12 @@ public class ProductTest {
         start();
         ArrayList<String> campaignPriceStyle = getPriceStyle(getCampaignPriceLocation(getProductPageLocator()));
         String campaignPriceColor = campaignPriceStyle.get(0);
-        Assert.assertEquals(campaignPriceColor, "rgba(204, 0, 0, 1)");
+        if (driver instanceof ChromeDriver || driver instanceof InternetExplorerDriver) {
+            Assert.assertEquals(campaignPriceColor, "rgba(204, 0, 0, 1)");
+        }
+        if (driver instanceof FirefoxDriver) {
+            Assert.assertEquals(campaignPriceColor, "rgb(204, 0, 0)");
+        }
         String campaignPriceTextDecoration = campaignPriceStyle.get(1);
         Assert.assertEquals(campaignPriceTextDecoration, "STRONG");
         String campaignPriceSizeLine = campaignPriceStyle.get(2);

@@ -13,7 +13,6 @@ import java.util.concurrent.TimeUnit;
 
 public class AddProductTest {
     private static WebDriver driver;
-    private static WebDriverWait wait;
     /**
      * Залогинивается в панели администратора в браузере Google Chrome.
      */
@@ -47,7 +46,7 @@ public class AddProductTest {
         clickOnMenu();
         WebElement newProductButton = driver.findElement(By.cssSelector("#main > ul > li:nth-child(3) > a"));
         newProductButton.click();
-        // Заполняет поля на вкладке General.
+
         WebElement content = driver.findElement(By.className("tab-content"));
         WebElement productGroupsCheckboxField = content.findElement(By.cssSelector("#tab-general > div > div:nth-child(1) > div:nth-child(4)"));
         WebElement productGroupsCheckbox = productGroupsCheckboxField.findElement(By.cssSelector("#tab-general > div > div:nth-child(1) > div:nth-child(4) > div > div"));
@@ -94,10 +93,9 @@ public class AddProductTest {
         File image = new File("https://github.com/helendengina/firsttest/blob/master/src/test/java/OrangeDuck.jpg");
         String absolutePathToImage = image.getAbsolutePath();
         imageField.sendKeys(absolutePathToImage);
-        // Переходит на вкладку Information.
+
         WebElement informationButton = driver.findElement(By.linkText("Information"));
         informationButton.click();
-        // Заполняет поля на вкладке Information.
         WebElement informationContent = driver.findElement(By.className("tab-content"));
         Select selectManufacturer = new Select(informationContent.findElement(By.name("manufacturer_id")));
         selectManufacturer.selectByIndex(1);
@@ -109,10 +107,9 @@ public class AddProductTest {
         WebElement attributesForm = informationContent.findElement(By.cssSelector("#tab-information > div:nth-child(5) > div"));
         WebElement attributesField = attributesForm.findElement(By.name("attributes[en]"));
         attributesField.sendKeys("Color: orange.");
-        // Переходит на вкладку Prices.
+
         WebElement pricesButton = driver.findElement(By.linkText("Prices"));
         pricesButton.click();
-        // Заполняет поля на вкладке Prices.
         WebElement purchasePriceForm = driver.findElement(By.cssSelector("#prices > div > div:nth-child(1)"));
         WebElement purchasePriceField = purchasePriceForm.findElement(By.name("purchase_price"));
         purchasePriceField.clear();
@@ -133,7 +130,7 @@ public class AddProductTest {
         WebElement grossPriceEUR = driver.findElement(By.name("gross_prices[EUR]"));
         grossPriceEUR.clear();
         grossPriceEUR.sendKeys("2,23");
-        // Переходит на вкладку General для сохранения продукта.
+
         WebElement generalLink = driver.findElement(By.linkText("General"));
         generalLink.click();
         saveSettings();
@@ -182,7 +179,7 @@ public class AddProductTest {
     /**
      * Закрывает браузер.
      */
-    //@AfterSuite
+    @AfterSuite
     public static void stop() {
         driver.quit();
         driver = null;

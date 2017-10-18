@@ -59,6 +59,9 @@ public class AddAndDeleteProductTest {
         addToCartButton.click();
     }
 
+    /**
+     * Закрывает карточку товара.
+     */
     public void closeProductWindow(){
         WebElement window = driver.findElement(By.className("featherlight-content"));
         WebElement closeButton = window.findElement(By.cssSelector("body > div.featherlight.active > div > button"));
